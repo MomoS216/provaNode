@@ -1,24 +1,18 @@
-let F = [];
+const n = 10;
 
-function fibbonacci(n, F) {
-    let i = F.length;
+function fibonacciAsync(n ) {
+return new Promise((resolve , reject)=>{
+   if (n === 2) {
+      const F = [1,1];
+      resolve(F);
+   } else {
+      setImmediate(() => {
+         fibonacciAsync(n-1).then( (F) => {
+            const len = F.length;
+            F.push(F[len - 1] + F[len - 2]);
+            resolve(F);
+         })});
+      }});  }
 
-    if (i < n) {
-        if (i < 2) {
-            F = [1, 1];
-        } else {
-            F.push(F[i - 1] + F[i - 2]);
-        }
 
-        setImmediate(() => fibbonacci(n, F));
-    }
-
-    return F;
-}
-
-let prova = fibbonacci(10, F);
-
-prova.forEach(element => {
-    console.log(element);
-});
-
+   fibonacciAsync(n).then((array)=>{console.log("Sync: " + array.join('-'));});
